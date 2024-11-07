@@ -373,7 +373,8 @@ if __name__ == "__main__":
     DRIVER_DATA_PATH = 'https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing'
 
     backend = "nccl"
-    model_path = 'TheBloke/phi-2-GPTQ'
+    #model_path = 'TheBloke/phi-2-GPTQ'
+    model_path = 'Qwen/Qwen2.5-1.5B'
     if os.environ.get("DEBUG"):
         data_path = "test_data.json"
     else:
