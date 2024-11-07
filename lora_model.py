@@ -747,5 +747,5 @@ TRANSFORMERS_MODELS_TO_LORA_TARGET_MODULES_MAPPING = {
     "layoutlm": ["query", "value"],
     "llama": ["q_proj", "v_proj"],
     "chatglm": ["query_key_value"],
-    "qwen":["q_proj", "k_proj", "v_proj", "o_proj"]
+    "qwen2":["q_proj", "k_proj", "v_proj", "o_proj"]
 }
