@@ -354,7 +354,7 @@ def load_pretrained_model(local_rank, model_path: str = ""):
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM",
-        target_modules=['lm_head.linear', 'transformer.embd.wte']
+        #target_modules=['lm_head.linear', 'transformer.embd.wte']
     )
 
     # TODO: Create LoRA model
