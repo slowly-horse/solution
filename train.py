@@ -400,9 +400,9 @@ if __name__ == "__main__":
     data_path = 'chiennv/mini-ultrachat'
     
     if os.environ.get("DEBUG"):
-        data_path = "test_ultra_chat_data.json"
+        data_path = 'chiennv/mini-ultrachat'
     else:
-        data_path = 'ultra_chat_data.json'
+        data_path = 'chiennv/mini-ultrachat'
 
     size_valid_set = 0.15
     max_length = 128
