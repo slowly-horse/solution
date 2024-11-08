@@ -8,7 +8,7 @@ def create_datasets(tokenizer: AutoTokenizer, data_path: str, max_length: int, s
         input_ids = [tokenizer.apply_chat_template(conversation, tokenize=True)[: max_length] for conversation in examples['conversations']]
         return {'input_ids': input_ids}
         
-    dataset = datasets.load_dataset(data_path, split='train[:]')
+    dataset = datasets.load_dataset('json', data_path, split='train[:]')
     dataset = dataset.map(convert_conversation_to_input, remove_columns=list(dataset.features), batched=True)
     
     dataset = dataset.train_test_split(test_size=size_valid_set, shuffle=True, seed=seed)
@@ -19,8 +19,8 @@ def create_datasets(tokenizer: AutoTokenizer, data_path: str, max_length: int, s
     # train_data.set_format('torch')
     # valid_data.set_format('torch')
 
-    dataset['test'].to_json('dataset/test_ultra_chat_data.json')
-    dataset['train'].to_json('dataset/ultra_chat_data.json')
+    train_data.save_to_disk('test_ultra_chat_data.json')
+    valid_data.save_to_disk('ultra_chat_data.json')
 
     return train_data, valid_data
 
