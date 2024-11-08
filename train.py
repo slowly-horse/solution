@@ -392,15 +392,17 @@ def load_pretrained_model(local_rank, model_path: str = ""):
 
 if __name__ == "__main__":
     OUTPUT_DIR = "checkpoints/"
-    DRIVER_DATA_PATH = 'https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing'
+    #DATA_PATHDRIVER_ = 'https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing'
 
     backend = "nccl"
     #model_path = 'TheBloke/phi-2-GPTQ'
     model_path = 'Qwen/Qwen2.5-1.5B'
+    data_path = 'chiennv/mini-ultrachat'
+    
     if os.environ.get("DEBUG"):
-        data_path = "test_data.json"
+        data_path = "test_ultra_chat_data.json"
     else:
-        data_path = 'alpaca_data.json'
+        data_path = 'ultra_chat_data.json'
 
     size_valid_set = 0.15
     max_length = 128

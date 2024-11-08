@@ -3,16 +3,26 @@ import datasets
 from transformers import AutoTokenizer
 from datasets import load_dataset
 
-def create_datasets(tokenizer: AutoTokenizer, dataset_path: str, max_length: int, seed: int, size_valid_set: int):
+def create_datasets(tokenizer: AutoTokenizer, data_path: str, max_length: int, seed: int, size_valid_set: int):
     def convert_conversation_to_input(examples):
         input_ids = [tokenizer.apply_chat_template(conversation, tokenize=True)[: max_length] for conversation in examples['conversations']]
         return {'input_ids': input_ids}
         
-    dataset = datasets.load_dataset(dataset_path, split='train[:]')
+    dataset = datasets.load_dataset(data_path, split='train[:]')
     dataset = dataset.map(convert_conversation_to_input, remove_columns=list(dataset.features), batched=True)
     
     dataset = dataset.train_test_split(test_size=size_valid_set, shuffle=True, seed=seed)
-    return dataset['train'], dataset['test']
+
+    train_data = dataset['train'].shuffle()
+    valid_data = dataset['test']
+
+    # train_data.set_format('torch')
+    # valid_data.set_format('torch')
+
+    dataset['test'].to_json('dataset/test_ultra_chat_data.json')
+    dataset['train'].to_json('dataset/ultra_chat_data.json')
+
+    return train_data, valid_data
 
 # def create_datasets(data_path, size_valid_set, tokenizer, max_length, seed):
 #     def tokenize(prompt, add_eos_token=True):
