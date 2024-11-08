@@ -234,7 +234,13 @@ class Trainer:
             eval_dataset,
             batch_size=self.batch_size,
             sampler=SequentialSampler(eval_dataset),
-            collate_fn=DataCollatorForSeq2Seq(self.tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True),
+            # collate_fn=DataCollatorForSeq2Seq(self.tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True),
+            collate_fn = DataCollatorForCompletionOnlyLM(
+                instruction_template="<|im_start|>user\n",
+                response_template="<|im_start|>assistant\n",
+                tokenizer=tokenizer,
+                mlm=False,
+            ),
             drop_last=True)
 
         return data_trainloader, data_testloader
@@ -316,7 +322,7 @@ def load_tokenizer_from_pretrained_model(model_path):
     config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
     architecture = config.architectures[0]
     tokenizer = AutoTokenizer.from_pretrained(
-        model_path, trust_remote_code=True, device_map={"": torch.device(f"cuda:{0}")})
+        model_path, trust_remote_code=True, padding_size='right', device_map={"": torch.device(f"cuda:{0}")})
     tokenizer.pad_token = tokenizer.eos_token
     if _is_master_process():
         print('Completed to load config & tokenizer')
