@@ -2,6 +2,7 @@ import os
 import torch
 from tqdm import tqdm
 
+from trl import DataCollatorForCompletionOnlyLM
 
 from peft import LoraConfig, get_peft_model
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, DataCollatorForSeq2Seq
@@ -212,7 +213,13 @@ class Trainer:
             batch_size=self.batch_size,
             sampler=DistributedSampler(
                 train_dataset, rank=self.gpu_id) if self.is_ddp_training else None,
-            collate_fn=DataCollatorForSeq2Seq(self.tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True),
+            #collate_fn=DataCollatorForSeq2Seq(self.tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True),
+            collate_fn = DataCollatorForCompletionOnlyLM(
+                instruction_template="<|im_start|>user\n",
+                response_template="<|im_start|>assistant\n",
+                tokenizer=tokenizer,
+                mlm=False,
+            ),
             drop_last=True)
 
         # TODO: Prepare the evaluation DataLoader. Initialize 'DataLoader' with 'eval_dataset',
@@ -253,13 +260,14 @@ class Trainer:
         avg_loss = avg_loss/(len(eval_dataloader))
         return avg_loss
 
-    def run(self, data_path: str, size_valid_set: int = 0.25, seed: int = 123):
+    def run(self, data_path: str, size_valid_set: int = 500, seed: int = 123):
         """
         Run the training process.
 
         Returns:
             None
         """
+        # Load dataset
         train_dataset, eval_dataset = create_datasets(
             tokenizer=self.tokenizer,
             max_length=self.max_length,
@@ -270,6 +278,14 @@ class Trainer:
 
         train_dataloader, eval_dataloader = self.prepare_dataloader(
             train_dataset, eval_dataset)
+        
+        # collator = DataCollatorForCompletionOnlyLM(
+        # instruction_template="<|im_start|>user\n",
+        # response_template="<|im_start|>assistant\n",
+        # tokenizer=tokenizer,
+        # mlm=False,
+        # )
+    
 
         if self.is_ddp_training:
             self._set_ddp_training()
@@ -440,7 +456,7 @@ if __name__ == "__main__":
     trainer.run(
         data_path=data_path,
         size_valid_set=size_valid_set,
-        seed=seed
+        seed=seed,
     )
 
     if distributed_strategy == "ddp":
