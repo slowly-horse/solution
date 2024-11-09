@@ -266,7 +266,7 @@ class Trainer:
         avg_loss = avg_loss/(len(eval_dataloader))
         return avg_loss
 
-    def run(self, data_path: str, size_valid_set: int = 500, seed: int = 123):
+    def run(self, data_path: str, split: str, size_valid_set: int = 500,  seed: int = 123):
         """
         Run the training process.
 
@@ -280,7 +280,7 @@ class Trainer:
             data_path=data_path,
             size_valid_set=size_valid_set,
             seed=seed,
-            split=split
+            split=split,
         )
 
         train_dataloader, eval_dataloader = self.prepare_dataloader(
@@ -407,6 +407,7 @@ if __name__ == "__main__":
         data_path = 'chiennv/mini-ultrachat'
         split='train[:]'
 
+
     size_valid_set = 0.15
     max_length = 128
     num_epochs = 3
@@ -466,9 +467,10 @@ if __name__ == "__main__":
     # execute trainer
     trainer.run(
         data_path=data_path,
+        split=split,
         size_valid_set=size_valid_set,
         seed=seed,
-        split=split,
+        
     )
 
     if distributed_strategy == "ddp":
