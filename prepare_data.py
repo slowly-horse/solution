@@ -3,12 +3,12 @@ import datasets
 from transformers import AutoTokenizer
 from datasets import load_dataset
 
-def create_datasets(tokenizer: AutoTokenizer, data_path: str, max_length: int, seed: int, size_valid_set: int):
+def create_datasets(tokenizer: AutoTokenizer, data_path: str, max_length: int, seed: int, size_valid_set: int, split: str):
     def convert_conversation_to_input(examples):
         input_ids = [tokenizer.apply_chat_template(conversation, tokenize=True)[: max_length] for conversation in examples['conversations']]
         return {'input_ids': input_ids}
         
-    dataset = datasets.load_dataset(data_path, split='train[:]')
+    dataset = datasets.load_dataset(data_path, split=split)
     dataset = dataset.map(convert_conversation_to_input, remove_columns=list(dataset.features), batched=True)
     
     dataset = dataset.train_test_split(test_size=size_valid_set, shuffle=True, seed=seed)

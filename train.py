@@ -279,7 +279,8 @@ class Trainer:
             max_length=self.max_length,
             data_path=data_path,
             size_valid_set=size_valid_set,
-            seed=seed
+            seed=seed,
+            split=split
         )
 
         train_dataloader, eval_dataloader = self.prepare_dataloader(
@@ -401,8 +402,10 @@ if __name__ == "__main__":
     
     if os.environ.get("DEBUG"):
         data_path = 'chiennv/mini-ultrachat'
+        split='train[0:1000]'
     else:
         data_path = 'chiennv/mini-ultrachat'
+        split='train[:]'
 
     size_valid_set = 0.15
     max_length = 128
@@ -465,6 +468,7 @@ if __name__ == "__main__":
         data_path=data_path,
         size_valid_set=size_valid_set,
         seed=seed,
+        split=split,
     )
 
     if distributed_strategy == "ddp":
