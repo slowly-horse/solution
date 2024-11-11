@@ -266,7 +266,7 @@ class Trainer:
         avg_loss = avg_loss/(len(eval_dataloader))
         return avg_loss
 
-    def run(self, data_path: str, split: str, size_valid_set: int = 500,  seed: int = 123):
+    def run(self, data_path: str, size_valid_set: float,  seed: int = 123):
         """
         Run the training process.
 
@@ -280,7 +280,6 @@ class Trainer:
             data_path=data_path,
             size_valid_set=size_valid_set,
             seed=seed,
-            split=split,
         )
 
         train_dataloader, eval_dataloader = self.prepare_dataloader(
@@ -393,19 +392,18 @@ def load_pretrained_model(local_rank, model_path: str = ""):
 
 if __name__ == "__main__":
     OUTPUT_DIR = "checkpoints/"
-    #DATA_PATHDRIVER_ = 'https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing'
+    DRIVER_DATA_PATH = 'https://drive.google.com/file/d/1rBEW3xnNnMVvdt2bzcCgX1fwKi4_6suZ/view?usp=sharing'
 
     backend = "nccl"
     #model_path = 'TheBloke/phi-2-GPTQ'
     model_path = 'Qwen/Qwen2.5-1.5B'
-    data_path = 'chiennv/mini-ultrachat'
     
     if os.environ.get("DEBUG"):
-        data_path = 'chiennv/mini-ultrachat'
-        split='train[0:1000]'
+        data_path = 'test_data.json'
+
     else:
-        data_path = 'chiennv/mini-ultrachat'
-        split='train[:]'
+        data_path = 'alpaca_gpt4_data.json'
+        download_from_driver(path=DRIVER_DATA_PATH, location_path=data_path)
 
 
     size_valid_set = 0.15
@@ -467,7 +465,6 @@ if __name__ == "__main__":
     # execute trainer
     trainer.run(
         data_path=data_path,
-        split=split,
         size_valid_set=size_valid_set,
         seed=seed,
         
