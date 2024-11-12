@@ -12,4 +12,3 @@ auto-gptq
 #git+https://github.com/AutoGPTQ/AutoGPTQ.git
 optimum
 git+https://github.com/huggingface/peft.git
-trl

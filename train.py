@@ -2,7 +2,7 @@ import os
 import torch
 from tqdm import tqdm
 
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, DataCollatorForSeq2Seq
 
 from contextlib import nullcontext
@@ -270,13 +270,6 @@ class Trainer:
 
         train_dataloader, eval_dataloader = self.prepare_dataloader(
             train_dataset, eval_dataset)
-        
-        # collator = DataCollatorForCompletionOnlyLM(
-        # instruction_template="<|im_start|>user\n",
-        # response_template="<|im_start|>assistant\n",
-        # tokenizer=tokenizer,
-        # mlm=False,
-        # )
     
 
         if self.is_ddp_training:
