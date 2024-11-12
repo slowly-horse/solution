@@ -355,7 +355,6 @@ def load_pretrained_model(local_rank, model_path: str = ""):
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM",
-        #target_modules=['lm_head.linear', 'transformer.embd.wte']
     )
 
     # TODO: Create LoRA model
@@ -371,10 +370,9 @@ def load_pretrained_model(local_rank, model_path: str = ""):
 
 if __name__ == "__main__":
     OUTPUT_DIR = "checkpoints/"
-    DRIVER_DATA_PATH = 'https://drive.google.com/file/d/1rBEW3xnNnMVvdt2bzcCgX1fwKi4_6suZ/view?usp=sharing'
+    # DRIVER_DATA_PATH = 'https://drive.google.com/file/d/1rBEW3xnNnMVvdt2bzcCgX1fwKi4_6suZ/view?usp=sharing'
 
     backend = "nccl"
-    #model_path = 'TheBloke/phi-2-GPTQ'
     model_path = 'Qwen/Qwen2.5-1.5B'
     
     if os.environ.get("DEBUG"):
@@ -382,7 +380,7 @@ if __name__ == "__main__":
 
     else:
         data_path = 'alpaca_gpt4_data.json'
-        download_from_driver(path=DRIVER_DATA_PATH, location_path=data_path)
+        # download_from_driver(path=DRIVER_DATA_PATH, location_path=data_path)
 
 
     size_valid_set = 0.15
