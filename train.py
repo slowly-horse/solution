@@ -370,7 +370,7 @@ def load_pretrained_model(local_rank, model_path: str = ""):
 
 if __name__ == "__main__":
     OUTPUT_DIR = "checkpoints/"
-    # DRIVER_DATA_PATH = 'https://drive.google.com/file/d/1rBEW3xnNnMVvdt2bzcCgX1fwKi4_6suZ/view?usp=sharing'
+    # DRIVER_DATA_PATH = ''
 
     backend = "nccl"
     model_path = 'Qwen/Qwen2.5-1.5B'
